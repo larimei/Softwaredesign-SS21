@@ -1,0 +1,1 @@
+Einfache Konsolen-QuizApp für den Kurs Softwaredesign.
