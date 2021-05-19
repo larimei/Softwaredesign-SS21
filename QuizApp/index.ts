@@ -1,6 +1,6 @@
-import ConsoleHandling from "./QuizApp/Handler/ConsoleHandling";
-import { MainHandler } from "./QuizApp/MainHandler";
-import { User } from "./QuizApp/User.class";
+import ConsoleHandling from "./Handler/ConsoleHandling";
+import { MainHandler } from "./MainHandler";
+import { User } from "./User.class";
 
 ConsoleHandling.printInput("Willkommen zum Quiz.");
 let main: MainHandler = new MainHandler();

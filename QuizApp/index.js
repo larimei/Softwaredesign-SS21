@@ -3,8 +3,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var ConsoleHandling_1 = __importDefault(require("./\u00DCbungClasses/Handler/ConsoleHandling"));
-var MainHandler_1 = require("./\u00DCbungClasses/MainHandler");
+var ConsoleHandling_1 = __importDefault(require("./Handler/ConsoleHandling"));
+var MainHandler_1 = require("./MainHandler");
 ConsoleHandling_1.default.printInput("Willkommen zum Quiz.");
 var main = new MainHandler_1.MainHandler();
 main.viewUserOptions();
