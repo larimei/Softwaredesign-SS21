@@ -1,23 +1,4 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -58,44 +39,72 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var prompts_1 = __importDefault(require("prompts"));
-var readline = __importStar(require("readline"));
-var ConsoleHandling = /** @class */ (function () {
-    function ConsoleHandling() {
-        // logger object with syslog levels as specified loglevels
-        // logs into build_service.log in directory log and onto console of running node.js process
-        this.consoleLine = readline.createInterface({
-            input: process.stdin,
-            output: process.stdout
-        });
-        if (ConsoleHandling.instance)
-            throw new Error("Use ConsoleHandling.Instance() instead new ConsoleHandling()");
-        ConsoleHandling.instance = this;
+exports.Question = void 0;
+var ConsoleHandling_1 = __importDefault(require("./Handler/ConsoleHandling"));
+var Question = /** @class */ (function () {
+    function Question(questionName, question) {
+        this.question = "";
+        this.answers = [];
+        this.question = questionName;
+        if (question) {
+            for (var _i = 0, _a = question.answers; _i < _a.length; _i++) {
+                var answer = _a[_i];
+                this.answers.push(answer);
+            }
+        }
     }
-    ConsoleHandling.getInstance = function () {
-        return ConsoleHandling.instance;
-    };
-    ConsoleHandling.prototype.question = function (question) {
+    Question.prototype.addAnswers = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var response;
+            var questions, answerString, toggleQuestions;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, prompts_1.default(question)];
+                    case 0:
+                        questions = {
+                            type: "text",
+                            name: "value",
+                            message: "What is your shown answer?",
+                        };
+                        return [4 /*yield*/, ConsoleHandling_1.default.question(questions)];
                     case 1:
-                        response = _a.sent();
-                        return [2 /*return*/, response.value];
+                        answerString = _a.sent();
+                        this.pushAnswers(answerString);
+                        if (!(this.answerArray.length < 2)) return [3 /*break*/, 3];
+                        return [4 /*yield*/, this.addAnswers()];
+                    case 2:
+                        _a.sent();
+                        return [3 /*break*/, 6];
+                    case 3:
+                        if (!(this.answerArray.length < 10)) return [3 /*break*/, 6];
+                        toggleQuestions = {
+                            type: "toggle",
+                            name: "value",
+                            message: "Want to add another answer?",
+                            initial: true,
+                            active: "yes",
+                            inactive: "no",
+                        };
+                        return [4 /*yield*/, ConsoleHandling_1.default.question(toggleQuestions)];
+                    case 4:
+                        if (!_a.sent()) return [3 /*break*/, 6];
+                        return [4 /*yield*/, this.addAnswers()];
+                    case 5:
+                        _a.sent();
+                        _a.label = 6;
+                    case 6: return [2 /*return*/];
                 }
             });
         });
     };
-    ConsoleHandling.prototype.printInput = function (input) {
-        this.consoleLine.write(input);
-        this.consoleLine.write("\n");
+    Object.defineProperty(Question.prototype, "answerArray", {
+        get: function () {
+            return this.answers;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Question.prototype.pushAnswers = function (answer) {
+        this.answerArray.push(answer);
     };
-    ConsoleHandling.prototype.closeConsole = function () {
-        this.consoleLine.close();
-    };
-    ConsoleHandling.instance = new ConsoleHandling();
-    return ConsoleHandling;
+    return Question;
 }());
-exports.default = ConsoleHandling.getInstance();
+exports.Question = Question;

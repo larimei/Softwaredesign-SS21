@@ -1,4 +1,4 @@
-import { resolve } from 'path';
+import prompts, { PromptObject } from 'prompts';
 import * as readline from 'readline';
 
 class ConsoleHandling {
@@ -21,29 +21,9 @@ class ConsoleHandling {
     return ConsoleHandling.instance
   }
 
-  public question(question: String) : Promise<String> {
-    let answer : String = "";
-    return new Promise((resolve) => {
-      this.consoleLine.question(question.toString(), (_answer: string) => {
-        answer = _answer;
-        resolve(answer);
-      })
-    });
-  }
-
-  public showPossibilities(showPossibilities : String[], question: String, firstQuestion: string) : Promise<String> {
-    this.consoleLine.write("\n")
-    this.consoleLine.write(firstQuestion);
-    this.consoleLine.write("\n\n");
-    for(let possibility of showPossibilities) {
-      this.consoleLine.write(possibility.toString());
-      this.consoleLine.write("\n")
-    }
-    this.consoleLine.write("\n");
-
-    return new Promise((resolve) => this.consoleLine.question(question.toString(), (answer: string) => {
-      resolve(answer);
-    }));
+  public async question(question: PromptObject) : Promise<any> {
+    const response = await prompts(question);
+    return response.value;
   }
 
   public printInput(input: string) {

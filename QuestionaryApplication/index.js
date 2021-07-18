@@ -1,23 +1,4 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -59,43 +40,51 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var prompts_1 = __importDefault(require("prompts"));
-var readline = __importStar(require("readline"));
-var ConsoleHandling = /** @class */ (function () {
-    function ConsoleHandling() {
-        // logger object with syslog levels as specified loglevels
-        // logs into build_service.log in directory log and onto console of running node.js process
-        this.consoleLine = readline.createInterface({
-            input: process.stdin,
-            output: process.stdout
-        });
-        if (ConsoleHandling.instance)
-            throw new Error("Use ConsoleHandling.Instance() instead new ConsoleHandling()");
-        ConsoleHandling.instance = this;
-    }
-    ConsoleHandling.getInstance = function () {
-        return ConsoleHandling.instance;
-    };
-    ConsoleHandling.prototype.question = function (question) {
-        return __awaiter(this, void 0, void 0, function () {
-            var response;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, prompts_1.default(question)];
+var ConsoleHandling_1 = __importDefault(require("./Handler/ConsoleHandling"));
+var User_class_1 = require("./User.class");
+ConsoleHandling_1.default.printInput("Welcome to the Questionary.");
+(function () { return __awaiter(void 0, void 0, void 0, function () {
+    var response, actualUser;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, prompts_1.default({
+                    type: "select",
+                    name: "value",
+                    message: "What do you want to do?",
+                    choices: [
+                        {
+                            title: "Login",
+                            description: "You already have an account and want to login.",
+                            value: 1,
+                        },
+                        {
+                            title: "Register",
+                            description: "You don't have an account and want to register.",
+                            value: 2,
+                        },
+                        {
+                            title: "Nah, don't want anything of'em.",
+                            description: "Just continue as unsigned user.",
+                            value: 3,
+                        },
+                    ],
+                    initial: 0,
+                })];
+            case 1:
+                response = _a.sent();
+                actualUser = new User_class_1.User();
+                switch (response.value) {
                     case 1:
-                        response = _a.sent();
-                        return [2 /*return*/, response.value];
+                        actualUser.logIn();
+                        break;
+                    case 2:
+                        actualUser.register();
+                        break;
+                    case 3:
+                        actualUser.seeFunctions();
+                        break;
                 }
-            });
-        });
-    };
-    ConsoleHandling.prototype.printInput = function (input) {
-        this.consoleLine.write(input);
-        this.consoleLine.write("\n");
-    };
-    ConsoleHandling.prototype.closeConsole = function () {
-        this.consoleLine.close();
-    };
-    ConsoleHandling.instance = new ConsoleHandling();
-    return ConsoleHandling;
-}());
-exports.default = ConsoleHandling.getInstance();
+                return [2 /*return*/];
+        }
+    });
+}); })();
